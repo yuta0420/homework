@@ -39,7 +39,7 @@
   	//SQL文作成（SELECT文）
 	$sql='SELECT*FROM `posts` WHERE nickname LIKE "%'.$_POST['search_text'].'%"';
   }
-  else if(($_POST['search_text'])&&($POST['restart']=="valid")){
+  else if($_POST["restart"]=="valid"){
   	$sql ='SELECT*FROM `posts`ORDER BY id DESC';
   }
   else{
@@ -203,7 +203,7 @@
         			echo '<h2><a href="#">'.$post_each['nickname'].'</a> <span>'.$post_each['created'].'</span></h2>';
         			echo '<p>'.$post_each["comment"].'</p>';
         			?>
-        			<a href="bbs.php?action=delete&id=<?php echo $post_each['id'];?>" style="position: absolute; right:10px; bottom:10px;"><i class="fa fa-trash fa-lg"></i></a>
+        			<a onclick="return confirm('本当に削除しますか？');" href="bbs.php?action=delete&id=<?php echo $post_each['id'];?>" style="position: absolute; right:10px; bottom:10px;"><i class="fa fa-trash fa-lg"></i></a>
                 </div>
             </div>
 
