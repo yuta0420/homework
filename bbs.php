@@ -200,7 +200,11 @@
                 <div class="timeline-label">
                     
                 	<?php
-        			echo '<h2><a href="#">'.$post_each['nickname'].'</a> <span>'.$post_each['created'].'</span></h2>';
+
+                	$created=strtotime($post_each['created']);
+
+                	$created=date('Y年m月d日　H時i分s秒',$created);
+        			echo '<h2><a href="#">'.$post_each['nickname'].'</a><span>'.$created.'</span></h2>';
         			echo '<p>'.$post_each["comment"].'</p>';
         			?>
         			<a onclick="return confirm('本当に削除しますか？');" href="bbs.php?action=delete&id=<?php echo $post_each['id'];?>" style="position: absolute; right:10px; bottom:10px;"><i class="fa fa-trash fa-lg"></i></a>
