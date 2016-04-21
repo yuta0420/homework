@@ -1,25 +1,17 @@
 <?php
 
-	//XAMPPに接続
-  // ステップ1.db接続
-  // $dsn='mysql:dbname=oneline_bbs;host=localhost:8080';//本来はIPアドレスを指定
+	
+  require('dbconnect.php');
 
-  //接続するためのユーザー情報
-  // $user='root';
-  // $password='sp4p09y6';
+  //削除ボタンが押されたとき
+  if (isset($_GET['action'])&&($_GET['action']=='delete')){
+  	$deletesql = sprintf('DELETE FROM `posts` WHERE `id`=%s',$_GET['id']);
 
+  	//SQL文の実行
+    $stmt=$dbh->prepare($deletesql);
+    $stmt->execute();
 
-	//本番環境に接続
-	$dsn='mysql:dbname=LAA0731422-homework;host=mysql110.phy.lolipop.lan';
-
-	$user='LAA0731422';
- 	$password='sp4p09y6';
-
-  //DB接続オブジェクトを作成
-  $dbh=new PDO($dsn,$user,$password);
-
-  //接続したDBオブジェクトで文字コードutf8を使うように指定
-  $dbh->query('SET NAMES utf8');
+  }
 
 
   //POST送信が行われたら、下記の処理を実行
@@ -46,6 +38,9 @@
 
   	//SQL文作成（SELECT文）
 	$sql='SELECT*FROM `posts` WHERE nickname LIKE "%'.$_POST['search_text'].'%"';
+  }
+  else if(($_POST['search_text'])&&($POST['restart']=="valid")){
+  	$sql ='SELECT*FROM `posts`ORDER BY id DESC';
   }
   else{
 	//SQL文(SELECT文)
@@ -176,9 +171,10 @@
           <button type="submit" class="btn btn-primary col-xs-12" disabled>ニックネームで検索する</button>
         </form>
 
-        <!-- <form>
-        <button type="reset" class="btn btn-primary col-xs-12" >検索をリセットする</button>
-        </form> -->
+        <form>
+        <input name="restart" type="hidden" value="valid">
+        <button type="submit" class="btn btn-primary col-xs-12" >検索をリセットする</button>
+        </form>
 
        
       </div>
@@ -207,8 +203,7 @@
         			echo '<h2><a href="#">'.$post_each['nickname'].'</a> <span>'.$post_each['created'].'</span></h2>';
         			echo '<p>'.$post_each["comment"].'</p>';
         			?>
-      				
-
+        			<a href="bbs.php?action=delete&id=<?php echo $post_each['id'];?>" style="position: absolute; right:10px; bottom:10px;"><i class="fa fa-trash fa-lg"></i></a>
                 </div>
             </div>
 
