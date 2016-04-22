@@ -5,13 +5,24 @@
 
   //削除ボタンが押されたとき
   if (isset($_GET['action'])&&($_GET['action']=='delete')){
-  	$deletesql = sprintf('DELETE FROM `posts` WHERE `id`=%s',$_GET['id']);
+  	$deletesql = sprintf('UPDATE `posts` SET `delete_flag` = 1 WHERE `id`=%s',$_GET['id']);
 
   	//SQL文の実行
     $stmt=$dbh->prepare($deletesql);
     $stmt->execute();
 
   }
+
+
+  //LIKEが押されたときの処理
+  	if(isset($_GET['action'])&&($_GET['action']=='like')){
+  		//アップデート文でLIKEの数をカウントアップ（インクリメント）
+  		$likesql = sprintf('UPDATE `posts` SET `likes` = `likes`+1 WHERE `id`=%s',$_GET['id']);
+
+  	//SQL文の実行
+    $stmt=$dbh->prepare($likesql);
+    $stmt->execute();
+  	}
 
 
   //POST送信が行われたら、下記の処理を実行
@@ -37,16 +48,16 @@
   if(isset($_POST['search_text']) && !empty($_POST['search_text'])){
 
   	//SQL文作成（SELECT文）
-	$sql='SELECT*FROM `posts` WHERE nickname LIKE "%'.$_POST['search_text'].'%"';
+	$sql='SELECT*FROM `posts` WHERE `delete_flag`=0 AND`nickname` LIKE "%'.$_POST['search_text'].'%"';
   }
   else if($_POST["restart"]=="valid"){
-  	$sql ='SELECT*FROM `posts`ORDER BY id DESC';
+  	$sql ='SELECT*FROM `posts` WHERE `delete_flag`=0 ORDER BY id DESC';
   }
   else{
 	//SQL文(SELECT文)
- 	$sql ='SELECT*FROM `posts`ORDER BY id DESC';
+ 	$sql ='SELECT*FROM `posts`WHERE `delete_flag`=0 ORDER BY id DESC';
 	}
-
+ 
 	//SQL文実行
 	$stmt=$dbh->prepare($sql);
 	$stmt->execute();
@@ -209,6 +220,9 @@
         			echo '<h2><a href="#">'.$post_each['nickname'].'</a><span>'.$created.'</span></h2>';
         			echo '<p>'.$post_each["comment"].'</p>';
         			?>
+        			<p >
+        			<a href="bbs.php?action=like&id=<?php echo $post_each['id']; ?>"><i class="fa fa-thumbs-o-up fa-lg"></i>LIKE </a><?php echo $post_each['likes'];?>
+        			</p>
         			<p id="icon">
         			<a onclick="return confirm('本当に削除しますか？');" href="bbs.php?action=delete&id=<?php echo $post_each['id'];?>" ><i class="fa fa-trash fa-lg"></i></a>
         			</p>
