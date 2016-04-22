@@ -10,3 +10,11 @@ body {
   font-size: 30px;
   font-weight: 800;
 }
+
+#icon a{
+	position: absolute;
+	right:10px;
+	bottom:10px;
+}
+
+
