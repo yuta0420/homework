@@ -11,6 +11,9 @@
     $stmt=$dbh->prepare($deletesql);
     $stmt->execute();
 
+    //処理の再実行を防ぐために次画面へリダイレクト（画面移動）
+    header('Location:bbs.php');
+
   }
 
 
@@ -22,6 +25,10 @@
   	//SQL文の実行
     $stmt=$dbh->prepare($likesql);
     $stmt->execute();
+
+     //処理の再実行を防ぐために次画面へリダイレクト（画面移動）
+    header('Location:bbs.php');
+
   	}
 
 
@@ -40,6 +47,9 @@
 	//SQL文の実行
     $stmt=$dbh->prepare($sql);
     $stmt->execute();
+
+     //処理の再実行を防ぐために次画面へリダイレクト（画面移動）
+    header('Location:bbs.php');
 
 	}
 
@@ -61,6 +71,9 @@
 	//SQL文実行
 	$stmt=$dbh->prepare($sql);
 	$stmt->execute();
+
+	 //処理の再実行を防ぐために次画面へリダイレクト（画面移動）
+    header('Location:bbs.php');
 
   //格納する変数の初期化
   $posts = array();
